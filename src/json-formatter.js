@@ -8,6 +8,7 @@ angular.module('jsonFormatter', ['RecursionHelper'])
   var hoverPreviewEnabled = false;
   var hoverPreviewArrayCount = 100;
   var hoverPreviewFieldCount = 5;
+  var openLinksInNewPage = false;
 
   return {
     get hoverPreviewEnabled() {
@@ -30,12 +31,20 @@ angular.module('jsonFormatter', ['RecursionHelper'])
     set hoverPreviewFieldCount(value) {
       hoverPreviewFieldCount = parseInt(value, 10);
     },
+    
+    get openLinksInNewPage() {
+      return openLinksInNewPage;
+    },
+    set openLinksInNewPage(value) {
+     openLinksInNewPage = !!value;
+    },
 
     $get: function () {
       return {
         hoverPreviewEnabled: hoverPreviewEnabled,
         hoverPreviewArrayCount: hoverPreviewArrayCount,
-        hoverPreviewFieldCount: hoverPreviewFieldCount
+        hoverPreviewFieldCount: hoverPreviewFieldCount,
+        openLinksInNewPage: openLinksInNewPage
       };
     }
   };
@@ -164,7 +173,11 @@ angular.module('jsonFormatter', ['RecursionHelper'])
 
     scope.openLink = function (isUrl) {
       if(isUrl) {
-        window.location.href = scope.json;
+        if (!!JSONFormatterConfig.openLinksInNewPage) {
+          window.open(scope.json);
+        } else {
+          window.location.href = scope.json;
+        }
       }
     };
 
